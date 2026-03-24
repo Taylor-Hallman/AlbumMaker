@@ -2,22 +2,21 @@ QT += widgets
 
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+SRC_DIR = src
+APP_DIR = $$SRC_DIR/app
 
 SOURCES += \
-    editormain.cpp \
-    main.cpp \
-    startupwindow.cpp
+    src/app/editormain.cpp \
+    src/main.cpp \
+    src/app/startupwindow.cpp
 
 HEADERS += \
-    editormain.h \
-    startupwindow.h
+    src/app/editormain.h \
+    src/app/startupwindow.h
 
 FORMS += \
-    editormain.ui \
-    startupwindow.ui
+    src/app/editormain.ui \
+    src/app/startupwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
