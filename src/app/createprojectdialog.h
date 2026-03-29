@@ -24,6 +24,9 @@ private slots:
 
 private:
     Ui::CreateProjectDialog *ui;
+
+signals:
+    void createdProject();
 };
 
 #endif // CREATEPROJECTDIALOG_H

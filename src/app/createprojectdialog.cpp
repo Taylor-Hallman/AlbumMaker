@@ -22,7 +22,15 @@ void CreateProjectDialog::on_cancelBtn_clicked()
 
 void CreateProjectDialog::on_nextBtn_clicked()
 {
-    // todo
+    int currRow = ui->listWidget->currentRow();
+    if (currRow == ui->listWidget->count() - 1) {
+        emit createdProject();
+        this->close();
+    }
+    else {
+        ui->listWidget->setCurrentRow(++currRow);
+        ui->stackedWidget->setCurrentIndex(currRow);
+    }
 }
 
 
