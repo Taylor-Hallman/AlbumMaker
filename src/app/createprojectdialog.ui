@@ -52,7 +52,7 @@
          <cursorShape>ArrowCursor</cursorShape>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="projectName">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -74,12 +74,12 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="coverArt">
+        <widget class="ImageDropWidget" name="coverArt">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="imageLabel">
             <property name="text">
-             <string>Add an Image For Your Album's Cover Art (Drag and Drop)</string>
+             <string>Add an Image For Your Album's Cover Art (Drag and Drop or Click Browse)</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -95,10 +95,14 @@
              <number>10</number>
             </property>
             <item>
-             <widget class="QLineEdit" name="lineEdit_2"/>
+             <widget class="QLineEdit" name="fileTxt">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="browseBtn">
               <property name="text">
                <string>Browse...</string>
               </property>
@@ -166,6 +170,12 @@
    <class>NoUserSelectListWidget</class>
    <extends>QListWidget</extends>
    <header>src/widgets/nouserselectlistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ImageDropWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">src/widgets/imagedropwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

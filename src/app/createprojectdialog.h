@@ -2,6 +2,7 @@
 #define CREATEPROJECTDIALOG_H
 
 #include <QDialog>
+#include <QPixmap>
 
 namespace Ui {
 class CreateProjectDialog;
@@ -22,8 +23,14 @@ private slots:
 
     void on_nameField_textEdited(const QString &arg1);
 
+    void on_browseBtn_clicked();
+
+    void on_imageDropped(const QString& path);
+
 private:
     Ui::CreateProjectDialog *ui;
+
+    void handleImage(const QString& path);
 
 signals:
     void createdProject();
