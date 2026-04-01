@@ -27,10 +27,17 @@ private slots:
 
     void on_imageDropped(const QString& path);
 
+    void on_audioDropped(const QString& path);
+
+    void on_addBtn_clicked();
+
+    void on_removeBtn_clicked();
+
 private:
     Ui::CreateProjectDialog *ui;
 
     void handleImage(const QString& path);
+    void handleAudio(const QString& path);
 
 signals:
     void createdProject();

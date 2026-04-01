@@ -1,5 +1,5 @@
-#ifndef IMAGEDROPWIDGET_H
-#define IMAGEDROPWIDGET_H
+#ifndef FILEDROPWIDGET_H
+#define FILEDROPWIDGET_H
 
 #include <QWidget>
 #include <QDragEnterEvent>
@@ -7,11 +7,11 @@
 #include <QDropEvent>
 #include <QLabel>
 
-class ImageDropWidget : public QWidget
+class FileDropWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ImageDropWidget(QWidget *parent = nullptr);
+    explicit FileDropWidget(QWidget *parent = nullptr);
 
     void setLabel(QLabel* label);
 
@@ -25,6 +25,8 @@ private:
 
 signals:
     void imageDropped(const QString& path);
+    void audioDropped(const QString& path);
+    void unsupportedFileDropped();
 };
 
-#endif // IMAGEDROPWIDGET_H
+#endif // FILEDROPWIDGET_H

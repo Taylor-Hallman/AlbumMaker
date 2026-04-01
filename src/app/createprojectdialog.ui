@@ -41,6 +41,14 @@
        <set>AlignCenter</set>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Tracks</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignCenter</set>
+      </property>
+     </item>
     </widget>
    </item>
    <item>
@@ -52,7 +60,7 @@
          <cursorShape>ArrowCursor</cursorShape>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="projectName">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -74,7 +82,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="ImageDropWidget" name="coverArt">
+        <widget class="FileDropWidget" name="coverArt">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="imageLabel">
@@ -105,6 +113,84 @@
              <widget class="QPushButton" name="browseBtn">
               <property name="text">
                <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="FileDropWidget" name="tracks">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Add Tracks to Your Album (Drag and Drop or Click Add)</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tracksTable">
+            <attribute name="horizontalHeaderVisible">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>19</number>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>200</number>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Path</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="leftMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="downBtn">
+              <property name="text">
+               <string>Move Down</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="upBtn">
+              <property name="text">
+               <string>Move Up</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="removeBtn">
+              <property name="text">
+               <string>Remove</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="addBtn">
+              <property name="text">
+               <string>Add</string>
               </property>
              </widget>
             </item>
@@ -172,9 +258,9 @@
    <header>src/widgets/nouserselectlistwidget.h</header>
   </customwidget>
   <customwidget>
-   <class>ImageDropWidget</class>
+   <class>FileDropWidget</class>
    <extends>QWidget</extends>
-   <header location="global">src/widgets/imagedropwidget.h</header>
+   <header location="global">src/widgets/filedropwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

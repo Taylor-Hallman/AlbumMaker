@@ -10,14 +10,14 @@ SOURCES += \
     src/app/editormain.cpp \
     src/main.cpp \
     src/app/startupwindow.cpp \
-    src/widgets/imagedropwidget.cpp \
+    src/widgets/filedropwidget.cpp \
     src/widgets/nouserselectlistwidget.cpp
 
 HEADERS += \
     src/app/createprojectdialog.h \
     src/app/editormain.h \
     src/app/startupwindow.h \
-    src/widgets/imagedropwidget.h \
+    src/widgets/filedropwidget.h \
     src/widgets/nouserselectlistwidget.h
 
 FORMS += \

@@ -1,7 +1,8 @@
 #include "createprojectdialog.h"
 #include "ui_createprojectdialog.h"
-#include "../widgets/imagedropwidget.h"
+#include "../widgets/filedropwidget.h"
 #include <QFileDialog>
+#include <QImageReader>
 
 CreateProjectDialog::CreateProjectDialog(QWidget *parent)
     : QDialog(parent)
@@ -11,7 +12,8 @@ CreateProjectDialog::CreateProjectDialog(QWidget *parent)
     ui->nextBtn->setEnabled(false);
     ui->listWidget->setCurrentRow(0);
     ui->stackedWidget->setCurrentIndex(0);
-    QObject::connect(ui->coverArt, &ImageDropWidget::imageDropped, this, &CreateProjectDialog::on_imageDropped);
+    QObject::connect(ui->coverArt, &FileDropWidget::imageDropped, this, &CreateProjectDialog::on_imageDropped);
+    QObject::connect(ui->tracks, &FileDropWidget::audioDropped, this, &CreateProjectDialog::on_audioDropped);
 }
 
 CreateProjectDialog::~CreateProjectDialog()
@@ -47,8 +49,37 @@ void CreateProjectDialog::on_nameField_textEdited(const QString&)
 
 void CreateProjectDialog::on_browseBtn_clicked()
 {
-    QString file = QFileDialog::getOpenFileName(this, "Select Image", "", "Images (*.png *.jpg *.jpeg *.bmp *.gif *.webp)");
+    QStringList formats;
+    for (const QByteArray& format : QImageReader::supportedImageFormats())
+        formats << "*." + format;
+
+    QString filter = "Images (" + formats.join(' ') + ")";
+    QString file = QFileDialog::getOpenFileName(this, "Select Image", "", filter);
     handleImage(file);
+}
+
+
+void CreateProjectDialog::on_addBtn_clicked()
+{
+    QStringList files = QFileDialog::getOpenFileNames(this, "Select Audio", "", "Audio Files (*.mp3 *.wav *.ogg *.flac)");
+    for (const QString& file : std::as_const(files))
+        handleAudio(file);
+}
+
+
+void CreateProjectDialog::on_removeBtn_clicked()
+{
+    const auto& selectedItems = ui->tracksTable->selectedItems();
+    QList<int> rows;
+    for (auto item : selectedItems)
+        rows.push_back(item->row());
+    std::sort(rows.begin(), rows.end(), std::greater<int>());
+
+    for (int row : rows)
+        ui->tracksTable->removeRow(row);
+
+    if (ui->tracksTable->rowCount() == 0)
+        ui->nextBtn->setText("Skip");
 }
 
 void CreateProjectDialog::on_imageDropped(const QString& path)
@@ -56,8 +87,14 @@ void CreateProjectDialog::on_imageDropped(const QString& path)
     handleImage(path);
 }
 
+void CreateProjectDialog::on_audioDropped(const QString& path) {
+    handleAudio(path);
+}
+
 void CreateProjectDialog::handleImage(const QString &path)
 {
+    if (ui->stackedWidget->currentIndex() != 1)
+        return;
     if (!path.isEmpty()) {
         ui->fileTxt->setText(path);
         ui->nextBtn->setText("Next");
@@ -65,7 +102,22 @@ void CreateProjectDialog::handleImage(const QString &path)
         if (pixmap.isNull())
             ui->imageLabel->setText("Failed to load image");
         else
-            ui->imageLabel->setPixmap(pixmap.scaled(ui->imageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            ui->imageLabel->setPixmap(pixmap.scaled(ui->imageLabel->size() * 0.8, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
+void CreateProjectDialog::handleAudio(const QString& path) {
+    if (ui->stackedWidget->currentIndex() != 2)
+        return;
+    if (!path.isEmpty()) {
+        QFileInfo info(path);
+        QString baseFileName = info.completeBaseName();
+        int newRowIdx = ui->tracksTable->rowCount();
+        ui->tracksTable->insertRow(newRowIdx);
+        ui->tracksTable->setItem(newRowIdx, 0, new QTableWidgetItem(baseFileName));
+        QTableWidgetItem* pathItem = new QTableWidgetItem(path);
+        pathItem->setFlags(pathItem->flags() & ~Qt::ItemIsEditable);
+        ui->tracksTable->setItem(newRowIdx, 1, pathItem);
+        ui->nextBtn->setText("Finish");
+    }
+}
