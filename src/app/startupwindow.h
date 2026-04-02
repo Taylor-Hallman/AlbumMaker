@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_actionNew_Project_triggered();
+    void on_createdProject();
 
 private:
     Ui::StartupWindow *ui;

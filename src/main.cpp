@@ -1,4 +1,4 @@
-#include "startupwindow.h"
+#include "app/startupwindow.h"
 
 #include <QApplication>
 

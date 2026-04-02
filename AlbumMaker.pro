@@ -6,15 +6,22 @@ SRC_DIR = src
 APP_DIR = $$SRC_DIR/app
 
 SOURCES += \
+    src/app/createprojectdialog.cpp \
     src/app/editormain.cpp \
     src/main.cpp \
-    src/app/startupwindow.cpp
+    src/app/startupwindow.cpp \
+    src/widgets/filedropwidget.cpp \
+    src/widgets/nouserselectlistwidget.cpp
 
 HEADERS += \
+    src/app/createprojectdialog.h \
     src/app/editormain.h \
-    src/app/startupwindow.h
+    src/app/startupwindow.h \
+    src/widgets/filedropwidget.h \
+    src/widgets/nouserselectlistwidget.h
 
 FORMS += \
+    src/app/createprojectdialog.ui \
     src/app/editormain.ui \
     src/app/startupwindow.ui
 

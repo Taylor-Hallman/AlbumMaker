@@ -1,6 +1,7 @@
 #include "startupwindow.h"
-#include "editormain.h"
+#include "createprojectdialog.h"
 #include "ui_startupwindow.h"
+#include "editormain.h"
 
 StartupWindow::StartupWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,8 +17,14 @@ StartupWindow::~StartupWindow()
 
 void StartupWindow::on_actionNew_Project_triggered()
 {
-    EditorMain* window = new EditorMain(this);
+    CreateProjectDialog* dialog = new CreateProjectDialog();
+    QObject::connect(dialog, &CreateProjectDialog::createdProject, this, &StartupWindow::on_createdProject);
+    dialog->show();
+}
+
+void StartupWindow::on_createdProject() {
+    EditorMain* window = new EditorMain();
     window->show();
-    this->hide();
+    this->close();
 }
 
