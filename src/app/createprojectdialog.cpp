@@ -1,5 +1,6 @@
 #include "createprojectdialog.h"
 #include "ui_createprojectdialog.h"
+#include "editormain.h"
 #include "../widgets/filedropwidget.h"
 #include <QFileDialog>
 #include <QImageReader>
@@ -30,7 +31,12 @@ void CreateProjectDialog::on_nextBtn_clicked()
 {
     int currRow = ui->listWidget->currentRow();
     if (currRow == ui->listWidget->count() - 1) {
-        emit createdProject();
+        for (int row = 0; row < ui->tracksTable->rowCount(); row++)
+            tracks.push_back(ui->tracksTable->item(row, 1)->text());
+        EditorMain* window = new EditorMain();
+        window->show();
+        QObject::connect(window, &EditorMain::on_projectCreated, this, &CreateProjectDialog::createdProject);
+        emit createdProject(coverArt, tracks);
         this->close();
     }
     else {
@@ -118,7 +124,7 @@ void CreateProjectDialog::on_upBtn_clicked()
     ui->tracksTable->selectRow(targetRow);
 }
 
-void CreateProjectDialog::handleImage(const QString &path)
+void CreateProjectDialog::handleImage(const QString& path)
 {
     if (ui->stackedWidget->currentIndex() != 1)
         return;
@@ -128,8 +134,10 @@ void CreateProjectDialog::handleImage(const QString &path)
         QPixmap pixmap(path);
         if (pixmap.isNull())
             ui->imageLabel->setText("Failed to load image");
-        else
+        else {
             ui->imageLabel->setPixmap(pixmap.scaled(ui->imageLabel->size() * 0.8, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            coverArt = path;
+        }
     }
 }
 

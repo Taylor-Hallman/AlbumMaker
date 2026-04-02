@@ -13,3 +13,8 @@ EditorMain::~EditorMain()
 {
     delete ui;
 }
+
+void EditorMain::on_projectCreated(QString coverArt, QVector<QString> tracks)
+{
+
+}

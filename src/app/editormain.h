@@ -15,6 +15,9 @@ public:
     explicit EditorMain(QWidget *parent = nullptr);
     ~EditorMain();
 
+public slots:
+    void on_projectCreated(QString coverArt, QVector<QString> tracks);
+
 private:
     Ui::EditorMain *ui;
 };

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QPixmap>
+#include <QVector>
 
 namespace Ui {
 class CreateProjectDialog;
@@ -41,13 +42,15 @@ private slots:
 
 private:
     Ui::CreateProjectDialog *ui;
+    QString coverArt;
+    QVector<QString> tracks;
 
     void handleImage(const QString& path);
     void handleAudio(const QString& path);
     QSet<int> getSelectedRows();
 
 signals:
-    void createdProject();
+    void createdProject(QString coverArt, QVector<QString> tracks);
 };
 
 #endif // CREATEPROJECTDIALOG_H

@@ -19,7 +19,7 @@ public:
 
 private slots:
     void on_actionNew_Project_triggered();
-    void on_createdProject();
+    void on_createdProject(QString, QVector<QString>);
 
 private:
     Ui::StartupWindow *ui;
