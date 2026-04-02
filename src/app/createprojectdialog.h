@@ -33,11 +33,18 @@ private slots:
 
     void on_removeBtn_clicked();
 
+    void on_downBtn_clicked();
+
+    void on_upBtn_clicked();
+
+    void on_tracksTable_itemSelectionChanged();
+
 private:
     Ui::CreateProjectDialog *ui;
 
     void handleImage(const QString& path);
     void handleAudio(const QString& path);
+    QSet<int> getSelectedRows();
 
 signals:
     void createdProject();

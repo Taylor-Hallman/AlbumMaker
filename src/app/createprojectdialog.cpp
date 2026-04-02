@@ -69,12 +69,9 @@ void CreateProjectDialog::on_addBtn_clicked()
 
 void CreateProjectDialog::on_removeBtn_clicked()
 {
-    const auto& selectedItems = ui->tracksTable->selectedItems();
-    QList<int> rows;
-    for (auto item : selectedItems)
-        rows.push_back(item->row());
+    QSet<int> rowSet = getSelectedRows();
+    QVector<int> rows(rowSet.begin(), rowSet.end());
     std::sort(rows.begin(), rows.end(), std::greater<int>());
-
     for (int row : rows)
         ui->tracksTable->removeRow(row);
 
@@ -89,6 +86,36 @@ void CreateProjectDialog::on_imageDropped(const QString& path)
 
 void CreateProjectDialog::on_audioDropped(const QString& path) {
     handleAudio(path);
+}
+
+
+void CreateProjectDialog::on_downBtn_clicked()
+{
+    QSet<int> rows = getSelectedRows();
+    Q_ASSERT(rows.count() == 1 && !rows.contains(ui->tracksTable->rowCount() - 1));
+    int sourceRow = *rows.begin();
+    int targetRow = sourceRow + 2;
+
+    ui->tracksTable->insertRow(targetRow);
+    for (int col = 0; col < ui->tracksTable->columnCount(); col++)
+        ui->tracksTable->setItem(targetRow, col, ui->tracksTable->takeItem(sourceRow, col));
+    ui->tracksTable->removeRow(sourceRow);
+    ui->tracksTable->selectRow(targetRow - 1);
+}
+
+
+void CreateProjectDialog::on_upBtn_clicked()
+{
+    QSet<int> rows = getSelectedRows();
+    Q_ASSERT(rows.count() == 1 && !rows.contains(0));
+    int sourceRow = *rows.begin();
+    int targetRow = sourceRow++ - 1;
+
+    ui->tracksTable->insertRow(targetRow);
+    for (int col = 0; col < ui->tracksTable->columnCount(); col++)
+        ui->tracksTable->setItem(targetRow, col, ui->tracksTable->takeItem(sourceRow, col));
+    ui->tracksTable->removeRow(sourceRow);
+    ui->tracksTable->selectRow(targetRow);
 }
 
 void CreateProjectDialog::handleImage(const QString &path)
@@ -121,3 +148,21 @@ void CreateProjectDialog::handleAudio(const QString& path) {
         ui->nextBtn->setText("Finish");
     }
 }
+
+QSet<int> CreateProjectDialog::getSelectedRows()
+{
+    const auto& selectedItems = ui->tracksTable->selectedItems();
+    QSet<int> rows;
+    for (auto item : selectedItems)
+        rows.insert(item->row());
+    return rows;
+}
+
+void CreateProjectDialog::on_tracksTable_itemSelectionChanged()
+{
+    QSet<int> rows = getSelectedRows();
+    ui->upBtn->setEnabled(rows.count() == 1 && !rows.contains(0));
+    ui->downBtn->setEnabled(rows.count() == 1 && !rows.contains(ui->tracksTable->rowCount() - 1));
+    ui->removeBtn->setEnabled(rows.count() > 0);
+}
+

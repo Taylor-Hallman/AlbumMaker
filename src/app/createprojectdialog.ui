@@ -168,6 +168,9 @@
             </property>
             <item>
              <widget class="QPushButton" name="downBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Move Down</string>
               </property>
@@ -175,6 +178,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="upBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Move Up</string>
               </property>
@@ -182,6 +188,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="removeBtn">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Remove</string>
               </property>
