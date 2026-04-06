@@ -32,11 +32,11 @@ void CreateProjectDialog::on_nextBtn_clicked()
     int currRow = ui->listWidget->currentRow();
     if (currRow == ui->listWidget->count() - 1) {
         for (int row = 0; row < ui->tracksTable->rowCount(); row++)
-            tracks.push_back(ui->tracksTable->item(row, 1)->text());
+            tracks.emplace_back(ui->tracksTable->item(row, 0)->text(), ui->tracksTable->item(row, 1)->text());
         EditorMain* window = new EditorMain();
         window->show();
-        QObject::connect(window, &EditorMain::on_projectCreated, this, &CreateProjectDialog::createdProject);
-        emit createdProject(coverArt, tracks);
+        QObject::connect(this, &CreateProjectDialog::createdProject, window, &EditorMain::on_projectCreated);
+        emit createdProject(projectName, albumName, artistName, coverArt, tracks);
         this->close();
     }
     else {
@@ -47,11 +47,29 @@ void CreateProjectDialog::on_nextBtn_clicked()
 }
 
 
-void CreateProjectDialog::on_nameField_textEdited(const QString&)
+void CreateProjectDialog::on_nameField_textEdited(const QString& text)
 {
     ui->nextBtn->setEnabled(!ui->nameField->text().isEmpty());
+    ui->albumNameField->setText(text);
 }
 
+
+void CreateProjectDialog::on_nameField_textChanged(const QString& text)
+{
+    projectName = text;
+}
+
+
+void CreateProjectDialog::on_albumNameField_textChanged(const QString& text)
+{
+    albumName = text;
+}
+
+
+void CreateProjectDialog::on_artistField_textChanged(const QString& text)
+{
+    artistName = text;
+}
 
 void CreateProjectDialog::on_browseBtn_clicked()
 {

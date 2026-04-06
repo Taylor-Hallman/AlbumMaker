@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TrackItem</class>
+ <widget class="QWidget" name="TrackItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1937</width>
+    <height>67</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5,5,5,0">
+   <item>
+    <widget class="QLabel" name="playImage">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="trackName">
+     <property name="text">
+      <string>Song Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="artistName">
+     <property name="text">
+      <string>Artist Name</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="time">
+     <property name="text">
+      <string>0:00</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>. . .</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

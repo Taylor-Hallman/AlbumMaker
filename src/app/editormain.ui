@@ -14,9 +14,278 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,5,1">
     <item>
-     <widget class="QWidget" name="widget" native="true"/>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="3,1">
+       <item>
+        <widget class="QWidget" name="widget_4" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
+          <item>
+           <widget class="QLabel" name="coverArt">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_7" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="5,1,1">
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="albumName">
+               <property name="font">
+                <font>
+                 <pointsize>32</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Album Title</string>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="artistName">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Artist Name</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_5" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="playAlbumBtn">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaPlaylistShuffle"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tracksTableWidget">
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget_3" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3,1">
+       <item>
+        <widget class="QWidget" name="widget_2" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="leftMargin">
+           <number>750</number>
+          </property>
+          <property name="rightMargin">
+           <number>750</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaPlaylistShuffle"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaSkipBackward"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="playBtn">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaPlaybackStart"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_4">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaSkipForward"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::MediaPlaylistRepeat"/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_6" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="textVisible">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>

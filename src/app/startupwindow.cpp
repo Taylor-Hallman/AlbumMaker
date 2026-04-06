@@ -21,7 +21,7 @@ void StartupWindow::on_actionNew_Project_triggered()
     dialog->show();
 }
 
-void StartupWindow::on_createdProject(QString, QVector<QString>) {
+void StartupWindow::on_createdProject(QString, QString, QString, QString, QVector<std::pair<QString, QString>>) {
     this->close();
 }
 

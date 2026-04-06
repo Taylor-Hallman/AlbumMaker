@@ -40,17 +40,24 @@ private slots:
 
     void on_tracksTable_itemSelectionChanged();
 
+    void on_nameField_textChanged(const QString &arg1);
+
+    void on_albumNameField_textChanged(const QString &arg1);
+
+    void on_artistField_textChanged(const QString &arg1);
+
 private:
     Ui::CreateProjectDialog *ui;
     QString coverArt;
-    QVector<QString> tracks;
+    QVector<std::pair<QString, QString>> tracks;
+    QString projectName, albumName, artistName;
 
     void handleImage(const QString& path);
     void handleAudio(const QString& path);
     QSet<int> getSelectedRows();
 
 signals:
-    void createdProject(QString coverArt, QVector<QString> tracks);
+    void createdProject(QString projectName, QString albumName, QString artistName, QString coverArt, QVector<std::pair<QString, QString>> tracks);
 };
 
 #endif // CREATEPROJECTDIALOG_H

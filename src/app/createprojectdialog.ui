@@ -63,7 +63,7 @@
          <number>2</number>
         </property>
         <widget class="QWidget" name="projectName">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="leftMargin">
            <number>50</number>
           </property>
@@ -71,14 +71,61 @@
            <number>50</number>
           </property>
           <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Project Name</string>
-            </property>
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,5">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Project Name</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="nameField"/>
+             </item>
+            </layout>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="nameField"/>
+           <widget class="QWidget" name="widget_4" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,5">
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Album Name</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="albumNameField"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_5" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,5">
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Artist</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="artistField"/>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -134,6 +181,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="tracksTable">
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+            </property>
             <attribute name="horizontalHeaderVisible">
              <bool>true</bool>
             </attribute>
@@ -159,7 +209,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="6,1,1,1,1">
             <property name="leftMargin">
              <number>20</number>
             </property>
@@ -167,12 +217,28 @@
              <number>20</number>
             </property>
             <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QPushButton" name="downBtn">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Move Down</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="QIcon::ThemeIcon::GoDown"/>
               </property>
              </widget>
             </item>
@@ -182,7 +248,10 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Move Up</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="QIcon::ThemeIcon::GoUp"/>
               </property>
              </widget>
             </item>
@@ -192,14 +261,20 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Remove</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="QIcon::ThemeIcon::DialogError"/>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="addBtn">
               <property name="text">
-               <string>Add</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset theme="QIcon::ThemeIcon::ListAdd"/>
               </property>
              </widget>
             </item>
