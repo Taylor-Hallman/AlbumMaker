@@ -4,6 +4,7 @@
 #include "../widgets/filedropwidget.h"
 #include <QFileDialog>
 #include <QImageReader>
+#include <QMediaMetaData>
 
 CreateProjectDialog::CreateProjectDialog(QWidget *parent)
     : QDialog(parent)
@@ -167,7 +168,20 @@ void CreateProjectDialog::handleAudio(const QString& path) {
         QString baseFileName = info.completeBaseName();
         int newRowIdx = ui->tracksTable->rowCount();
         ui->tracksTable->insertRow(newRowIdx);
-        ui->tracksTable->setItem(newRowIdx, 0, new QTableWidgetItem(baseFileName));
+
+        QMediaPlayer* tempPlayer = new QMediaPlayer(this);
+        tempPlayer->setSource(QUrl::fromLocalFile(path));
+        connect(tempPlayer, &QMediaPlayer::metaDataChanged, [this, tempPlayer, path, newRowIdx, baseFileName]() {
+            QMediaMetaData meta = tempPlayer->metaData();
+
+            QString title;
+
+            QVariant trackTitle = meta.value(QMediaMetaData::Title);
+
+            title = trackTitle.isNull() ? baseFileName : trackTitle.toString();
+            ui->tracksTable->setItem(newRowIdx, 0, new QTableWidgetItem(title));
+            tempPlayer->deleteLater();
+        });
         QTableWidgetItem* pathItem = new QTableWidgetItem(path);
         pathItem->setFlags(pathItem->flags() & ~Qt::ItemIsEditable);
         ui->tracksTable->setItem(newRowIdx, 1, pathItem);
