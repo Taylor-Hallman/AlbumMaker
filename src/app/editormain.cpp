@@ -57,7 +57,7 @@ void EditorMain::on_projectCreated(QString projectName, QString albumName, QStri
         auto hasMeta = std::make_shared<bool>(false);
         auto hasDuration = std::make_shared<bool>(false);
 
-        connect(tempPlayer, &QMediaPlayer::metaDataChanged, this, [this, tempPlayer, i, artistName, hasMeta, hasDuration]() {
+        /*connect(tempPlayer, &QMediaPlayer::metaDataChanged, this, [this, tempPlayer, i, artistName, hasMeta, hasDuration]() {
             QMediaMetaData meta = tempPlayer->metaData();
             QVariant artist = meta.value(QMediaMetaData::ContributingArtist);
             QString text = artist.isNull() ? artistName : artist.toString();
@@ -81,6 +81,25 @@ void EditorMain::on_projectCreated(QString projectName, QString albumName, QStri
             *hasDuration = true;
             if (hasMeta)
                 tempPlayer->deleteLater();
+        });*/
+
+        connect(tempPlayer, &QMediaPlayer::mediaStatusChanged, this, [this, tempPlayer, artistName, i](QMediaPlayer::MediaStatus status) {
+            if (status != QMediaPlayer::LoadedMedia)
+                return;
+
+            QMediaMetaData meta = tempPlayer->metaData();
+            qint64 duration = tempPlayer->duration();
+            int seconds = duration / 1000, minutes = seconds / 60;
+            seconds %= 60;
+            QString durationText = QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0'));
+
+            QVariant artist = meta.value(QMediaMetaData::ContributingArtist);
+            QString artistText = artist.isNull() ? artistName : artist.toString();
+
+            ui->tracksTableWidget->item(i, 1)->setText(artistText);
+            ui->tracksTableWidget->item(i, 2)->setText(durationText);
+            ui->tracksTableWidget->item(i, 2)->setData(Qt::UserRole, duration);
+            tempPlayer->deleteLater();
         });
 
     }
