@@ -49,7 +49,7 @@ private slots:
 private:
     Ui::CreateProjectDialog *ui;
     QString coverArt;
-    QVector<std::pair<QString, QString>> tracks;
+    QVector<QString> tracks;
     QString projectName, albumName, artistName;
 
     void handleImage(const QString& path);
@@ -57,7 +57,7 @@ private:
     QSet<int> getSelectedRows();
 
 signals:
-    void createdProject(QString projectName, QString albumName, QString artistName, QString coverArt, QVector<std::pair<QString, QString>> tracks);
+    void createdProject(QString projectName, QString albumName, QString artistName, QString coverArt, QVector<QString> tracks);
 };
 
 #endif // CREATEPROJECTDIALOG_H

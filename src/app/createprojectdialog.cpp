@@ -33,7 +33,7 @@ void CreateProjectDialog::on_nextBtn_clicked()
     int currRow = ui->listWidget->currentRow();
     if (currRow == ui->listWidget->count() - 1) {
         for (int row = 0; row < ui->tracksTable->rowCount(); row++)
-            tracks.emplace_back(ui->tracksTable->item(row, 0)->text(), ui->tracksTable->item(row, 1)->text());
+            tracks.push_back(ui->tracksTable->item(row, 1)->text());
         EditorMain* window = new EditorMain();
         window->show();
         QObject::connect(this, &CreateProjectDialog::createdProject, window, &EditorMain::on_projectCreated);
