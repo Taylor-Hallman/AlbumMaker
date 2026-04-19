@@ -98,11 +98,6 @@ void EditorMain::on_playSongBtn_clicked()
     }
 }
 
-void EditorMain::onTimeout(QPrivateSignal signal)
-{
-    int songDuration = ui->tracksTableWidget->item(currTrackIdx, 2)->data(Qt::UserRole).toInt();
-}
-
 void EditorMain::on_tableContextMenu(const QPoint &pos)
 {
     QTableWidgetItem* item = ui->tracksTableWidget->itemAt(pos);
@@ -180,7 +175,6 @@ void EditorMain::handleAudio(const QString& file)
         ui->tracksTableWidget->item(row, 1)->setText(artistText);
         auto durationItem = ui->tracksTableWidget->item(row, 2);
         durationItem->setText(durationText);
-        durationItem->setData(Qt::UserRole, duration);
         durationItem->setFlags(durationItem->flags() & ~Qt::ItemIsEditable);
         tempPlayer->deleteLater();
     });

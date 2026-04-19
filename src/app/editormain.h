@@ -29,9 +29,6 @@ private slots:
     void on_tableContextMenu(const QPoint& pos);
 
     void on_playSongBtn_clicked();
-
-    void onTimeout(QPrivateSignal signal);
-
 private:
     void playTrack(int trackIdx);
     QSet<int> getSelectedRows();
