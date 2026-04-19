@@ -26,13 +26,20 @@ public slots:
 private slots:
     void on_playAlbumBtn_clicked();
 
-    void on_playBtn_clicked();
     void on_tableContextMenu(const QPoint& pos);
+
+    void on_playSongBtn_clicked();
+
+    void onTimeout(QPrivateSignal signal);
 
 private:
     void playTrack(int trackIdx);
     QSet<int> getSelectedRows();
     void handleAudio(const QString& file);
+    void trackPositionChanged(qint64 position);
+    void trackDurationChanged(qint64 duration);
+
+    QString coverArtPath;
 
     Ui::EditorMain *ui;
 
@@ -40,6 +47,8 @@ private:
     QAudioOutput* audioOutput;
 
     bool isPlaying = false;
+    int currTrackIdx;
+    int currTime = 0;
 };
 
 #endif // EDITORMAIN_H

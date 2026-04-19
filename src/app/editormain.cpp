@@ -3,6 +3,7 @@
 #include <QIcon>
 #include <QMediaMetaData>
 #include <QFileDialog>
+#include <QTimer>
 
 EditorMain::EditorMain(QWidget *parent)
     : QMainWindow(parent)
@@ -17,6 +18,8 @@ EditorMain::EditorMain(QWidget *parent)
     player->setAudioOutput(audioOutput);
     connect(ui->tracksTableWidget, &QTableWidget::cellDoubleClicked, this, &EditorMain::on_trackActivated);
     connect(ui->tracksTableWidget, &QTableWidget::customContextMenuRequested, this, &EditorMain::on_tableContextMenu);
+    connect(player, &QMediaPlayer::positionChanged, this, &EditorMain::trackPositionChanged);
+    connect(player, &QMediaPlayer::durationChanged, this, &EditorMain::trackDurationChanged);
 }
 
 EditorMain::~EditorMain()
@@ -36,6 +39,7 @@ void EditorMain::on_projectCreated(QString projectName, QString albumName, QStri
         ui->coverArt->setText("Failed to load image");
     else
         ui->coverArt->setPixmap(pixmap.scaled(ui->coverArt->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    this->coverArtPath = coverArtPath;
 
     ui->tracksTableWidget->setColumnCount(3);ui->tracksTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);      // Title
     ui->tracksTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch); // Artist
@@ -63,7 +67,14 @@ void EditorMain::playTrack(int trackIdx)
 
     player->setSource(QUrl::fromLocalFile(filePath));
     player->play();
-    ui->playBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+    ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+    QPixmap pixmap(coverArtPath);
+    if (!pixmap.isNull())
+        ui->songImg->setPixmap(pixmap.scaled(ui->songImg->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->songTitle->setText(ui->tracksTableWidget->item(trackIdx, 0)->text());
+    ui->songArtistName->setText(ui->tracksTableWidget->item(trackIdx, 1)->text());
+
+    currTrackIdx = trackIdx;
     isPlaying = true;
 }
 
@@ -73,18 +84,23 @@ void EditorMain::on_playAlbumBtn_clicked()
 }
 
 
-void EditorMain::on_playBtn_clicked()
+void EditorMain::on_playSongBtn_clicked()
 {
     if (isPlaying) {
         isPlaying = false;
         player->pause();
-        ui->playBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
     }
     else {
         player->play();
-        ui->playBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
         isPlaying = true;
     }
+}
+
+void EditorMain::onTimeout(QPrivateSignal signal)
+{
+    int songDuration = ui->tracksTableWidget->item(currTrackIdx, 2)->data(Qt::UserRole).toInt();
 }
 
 void EditorMain::on_tableContextMenu(const QPoint &pos)
@@ -170,3 +186,19 @@ void EditorMain::handleAudio(const QString& file)
     });
 }
 
+void EditorMain::trackPositionChanged(qint64 position)
+{
+    ui->trackProgressBar->setValue((position * 100) / player->duration());
+    int seconds = position / 1000, minutes = seconds / 60;
+    seconds %= 60;
+    QString positionText = QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0'));
+    ui->songPositionTxt->setText(positionText);
+}
+
+void EditorMain::trackDurationChanged(qint64 duration)
+{
+    int seconds = duration / 1000, minutes = seconds / 60;
+    seconds %= 60;
+    QString durationText = QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0'));
+    ui->songDurationTxt->setText(durationText);
+}
