@@ -105,7 +105,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="shuffleBtn">
             <property name="text">
              <string/>
             </property>
@@ -251,7 +251,7 @@
               <number>500</number>
              </property>
              <item>
-              <widget class="QPushButton" name="pushButton_7">
+              <widget class="QPushButton" name="shuffleBtn_Player">
                <property name="text">
                 <string/>
                </property>
@@ -273,7 +273,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_8">
+              <widget class="QPushButton" name="skipBackwardBtn">
                <property name="text">
                 <string/>
                </property>
@@ -311,7 +311,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_9">
+              <widget class="QPushButton" name="skipForwardBtn">
                <property name="text">
                 <string/>
                </property>
@@ -330,7 +330,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_10">
+              <widget class="QPushButton" name="repeatBtn">
                <property name="text">
                 <string/>
                </property>
@@ -380,7 +380,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QProgressBar" name="trackProgressBar">
+              <widget class="AdjustableProgressBar" name="trackProgressBar">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -476,6 +476,11 @@
    <class>ReorderableTableWidget</class>
    <extends>QTableWidget</extends>
    <header>src/widgets/reorderabletablewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AdjustableProgressBar</class>
+   <extends>QProgressBar</extends>
+   <header>src/widgets/adjustableprogressbar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

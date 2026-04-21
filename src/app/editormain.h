@@ -6,6 +6,7 @@
 #include <QAudioOutput>
 #include <QSet>
 #include <QPoint>
+#include <QMouseEvent>
 
 namespace Ui {
 class EditorMain;
@@ -35,6 +36,8 @@ private:
     void handleAudio(const QString& file);
     void trackPositionChanged(qint64 position);
     void trackDurationChanged(qint64 duration);
+    void trackProgressBarValueEdited(int val);
+    void trackProgressBarMouseDragged(int);
 
     QString coverArtPath;
 

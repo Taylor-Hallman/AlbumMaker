@@ -16,8 +16,13 @@ EditorMain::EditorMain(QWidget *parent)
     audioOutput = new QAudioOutput(this);
 
     player->setAudioOutput(audioOutput);
+
     connect(ui->tracksTableWidget, &QTableWidget::cellDoubleClicked, this, &EditorMain::on_trackActivated);
     connect(ui->tracksTableWidget, &QTableWidget::customContextMenuRequested, this, &EditorMain::on_tableContextMenu);
+
+    connect(ui->trackProgressBar, &AdjustableProgressBar::valueEdited, this, &EditorMain::trackProgressBarValueEdited);
+    connect(ui->trackProgressBar, &AdjustableProgressBar::mouseDragged, this, &EditorMain::trackProgressBarMouseDragged);
+
     connect(player, &QMediaPlayer::positionChanged, this, &EditorMain::trackPositionChanged);
     connect(player, &QMediaPlayer::durationChanged, this, &EditorMain::trackDurationChanged);
 }
@@ -195,4 +200,16 @@ void EditorMain::trackDurationChanged(qint64 duration)
     seconds %= 60;
     QString durationText = QString("%1:%2").arg(minutes).arg(seconds, 2, 10, QChar('0'));
     ui->songDurationTxt->setText(durationText);
+}
+
+void EditorMain::trackProgressBarValueEdited(int val)
+{
+    int position = (val / 100.0) * player->duration();
+    player->setPosition(position);
+    player->play();
+}
+
+void EditorMain::trackProgressBarMouseDragged(int)
+{
+    player->pause();
 }
