@@ -6,7 +6,7 @@
 #include <QAudioOutput>
 #include <QSet>
 #include <QPoint>
-#include <QMouseEvent>
+#include <QStack>
 
 namespace Ui {
 class EditorMain;
@@ -32,12 +32,15 @@ private slots:
     void on_playSongBtn_clicked();
 private:
     void playTrack(int trackIdx);
+    void playNext();
     QSet<int> getSelectedRows();
     void handleAudio(const QString& file);
     void trackPositionChanged(qint64 position);
     void trackDurationChanged(qint64 duration);
+    void trackStateChanged(QMediaPlayer::PlaybackState newState);
     void trackProgressBarValueEdited(int val);
     void trackProgressBarMouseDragged(int);
+    void on_TracksReordered();
 
     QString coverArtPath;
 
@@ -49,6 +52,9 @@ private:
     bool isPlaying = false;
     int currTrackIdx;
     int currTime = 0;
+
+    QStack<std::pair<QString, int>> unshuffledTrackQueue;
+    QStack<std::pair<QString, int>> trackQueue;
 };
 
 #endif // EDITORMAIN_H

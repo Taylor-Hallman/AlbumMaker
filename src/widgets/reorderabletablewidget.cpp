@@ -29,4 +29,6 @@ void ReorderableTableWidget::dropEvent(QDropEvent* event)
 
         removeRow(sourceRow + offset);
     }
+
+    emit rowReordered();
 }

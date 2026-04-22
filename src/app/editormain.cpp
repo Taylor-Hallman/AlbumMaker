@@ -12,6 +12,8 @@ EditorMain::EditorMain(QWidget *parent)
     ui->setupUi(this);
     this->showMaximized();
 
+    ui->mediaPlayerUI->hide();
+
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
 
@@ -19,12 +21,14 @@ EditorMain::EditorMain(QWidget *parent)
 
     connect(ui->tracksTableWidget, &QTableWidget::cellDoubleClicked, this, &EditorMain::on_trackActivated);
     connect(ui->tracksTableWidget, &QTableWidget::customContextMenuRequested, this, &EditorMain::on_tableContextMenu);
+    connect(ui->tracksTableWidget, &ReorderableTableWidget::rowReordered, this, &EditorMain::on_TracksReordered);
 
     connect(ui->trackProgressBar, &AdjustableProgressBar::valueEdited, this, &EditorMain::trackProgressBarValueEdited);
     connect(ui->trackProgressBar, &AdjustableProgressBar::mouseDragged, this, &EditorMain::trackProgressBarMouseDragged);
 
     connect(player, &QMediaPlayer::positionChanged, this, &EditorMain::trackPositionChanged);
     connect(player, &QMediaPlayer::durationChanged, this, &EditorMain::trackDurationChanged);
+    connect(player, &QMediaPlayer::playbackStateChanged, this, &EditorMain::trackStateChanged);
 }
 
 EditorMain::~EditorMain()
@@ -66,13 +70,33 @@ void EditorMain::playTrack(int trackIdx)
     if (!item)
         return;
 
-    QString filePath = item->data(Qt::UserRole).toString();
+    unshuffledTrackQueue.clear();
+    for (int row = trackIdx; row < ui->tracksTableWidget->rowCount(); row++) {
+        QString path = ui->tracksTableWidget->item(row, 0)->data(Qt::UserRole).toString();
+        unshuffledTrackQueue.emplaceFront(path, row);
+    }
+
+    trackQueue = unshuffledTrackQueue;
+    playNext();
+}
+
+void EditorMain::playNext()
+{
+    if (trackQueue.isEmpty()) {
+        ui->mediaPlayerUI->hide();
+        ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+        return;
+    }
+
+    auto [filePath, trackIdx] = trackQueue.pop();
+
     if (filePath.isEmpty())
         return;
 
     player->setSource(QUrl::fromLocalFile(filePath));
     player->play();
     ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+    ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
     QPixmap pixmap(coverArtPath);
     if (!pixmap.isNull())
         ui->songImg->setPixmap(pixmap.scaled(ui->songImg->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -80,27 +104,29 @@ void EditorMain::playTrack(int trackIdx)
     ui->songArtistName->setText(ui->tracksTableWidget->item(trackIdx, 1)->text());
 
     currTrackIdx = trackIdx;
-    isPlaying = true;
 }
 
 void EditorMain::on_playAlbumBtn_clicked()
 {
-    playTrack(0);
+    switch (player->playbackState()) {
+    case QMediaPlayer::StoppedState:
+        playTrack(0);
+        break;
+    case QMediaPlayer::PlayingState:
+        player->pause();
+        break;
+    case QMediaPlayer::PausedState:
+        player->play();
+        break;
+    }
 }
-
 
 void EditorMain::on_playSongBtn_clicked()
 {
-    if (isPlaying) {
-        isPlaying = false;
+    if (player->isPlaying())
         player->pause();
-        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
-    }
-    else {
+    else
         player->play();
-        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
-        isPlaying = true;
-    }
 }
 
 void EditorMain::on_tableContextMenu(const QPoint &pos)
@@ -202,6 +228,23 @@ void EditorMain::trackDurationChanged(qint64 duration)
     ui->songDurationTxt->setText(durationText);
 }
 
+void EditorMain::trackStateChanged(QMediaPlayer::PlaybackState newState)
+{
+    switch (newState) {
+    case QMediaPlayer::StoppedState:
+        playNext(); // current track has finished playing, play the next one in the queue
+        break;
+    case QMediaPlayer::PlayingState:
+        ui->mediaPlayerUI->show();
+        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+        ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+        break;
+    case QMediaPlayer::PausedState:
+        ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+        ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+    }
+}
+
 void EditorMain::trackProgressBarValueEdited(int val)
 {
     int position = (val / 100.0) * player->duration();
@@ -212,4 +255,14 @@ void EditorMain::trackProgressBarValueEdited(int val)
 void EditorMain::trackProgressBarMouseDragged(int)
 {
     player->pause();
+}
+
+void EditorMain::on_TracksReordered()
+{
+    unshuffledTrackQueue.clear();
+    for (int row = 0; row < ui->tracksTableWidget->rowCount(); row++) {
+        const QString& path = ui->tracksTableWidget->item(row, 0)->data(Qt::UserRole).toString();
+        unshuffledTrackQueue.emplaceFront(path, row);
+    }
+    trackQueue = unshuffledTrackQueue;
 }
