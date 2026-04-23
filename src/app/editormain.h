@@ -30,8 +30,16 @@ private slots:
     void on_tableContextMenu(const QPoint& pos);
 
     void on_playSongBtn_clicked();
+    void on_skipBackwardBtn_clicked();
+    void on_skipForwardBtn_clicked();
+
+    void on_shuffleBtn_clicked(bool checked);
+
+    void on_shuffleBtn_Player_clicked(bool checked);
+
+
 private:
-    void playTrack(int trackIdx);
+    void playTrack(int trackIdx, bool keepFirst);
     void playNext();
     QSet<int> getSelectedRows();
     void handleAudio(const QString& file);
@@ -49,12 +57,11 @@ private:
     QMediaPlayer* player;
     QAudioOutput* audioOutput;
 
-    bool isPlaying = false;
-    int currTrackIdx;
+    bool inTransition = false;
+    int nextTrackIdx;
     int currTime = 0;
 
-    QStack<std::pair<QString, int>> unshuffledTrackQueue;
-    QStack<std::pair<QString, int>> trackQueue;
+    QVector<int> trackQueue;
 };
 
 #endif // EDITORMAIN_H

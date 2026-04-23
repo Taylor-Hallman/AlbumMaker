@@ -4,6 +4,7 @@
 #include <QMediaMetaData>
 #include <QFileDialog>
 #include <QTimer>
+#include <QRandomGenerator>
 
 EditorMain::EditorMain(QWidget *parent)
     : QMainWindow(parent)
@@ -61,34 +62,55 @@ void EditorMain::on_projectCreated(QString projectName, QString albumName, QStri
 void EditorMain::on_trackActivated(int row, int column)
 {
     Q_UNUSED(column);
-    playTrack(row);
+    playTrack(row, true);
 }
 
-void EditorMain::playTrack(int trackIdx)
+void EditorMain::playTrack(int trackIdx, bool keepFirst)
 {
-     QTableWidgetItem* item = ui->tracksTableWidget->item(trackIdx, 0);
+    QTableWidgetItem* item = ui->tracksTableWidget->item(trackIdx, 0);
     if (!item)
         return;
 
-    unshuffledTrackQueue.clear();
-    for (int row = trackIdx; row < ui->tracksTableWidget->rowCount(); row++) {
-        QString path = ui->tracksTableWidget->item(row, 0)->data(Qt::UserRole).toString();
-        unshuffledTrackQueue.emplaceFront(path, row);
+    trackQueue.clear();
+    bool shuffle = ui->shuffleBtn->isChecked();
+    int start = shuffle ? 0 : trackIdx;
+    for (int row = start; row < ui->tracksTableWidget->rowCount(); row++) {
+        trackQueue.push_back(row);
+    }
+    if (shuffle) {
+        if (keepFirst)
+            std::swap(trackQueue[0], trackQueue[trackIdx]);
+        int offset = keepFirst ? 1 : 0;
+        std::shuffle(trackQueue.begin() + offset, trackQueue.end(), *QRandomGenerator::global());
     }
 
-    trackQueue = unshuffledTrackQueue;
+    nextTrackIdx = 0;
+
     playNext();
 }
 
 void EditorMain::playNext()
 {
-    if (trackQueue.isEmpty()) {
-        ui->mediaPlayerUI->hide();
-        ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
-        return;
+    if (nextTrackIdx >= trackQueue.size()) {
+        if (ui->repeatBtn->isChecked()) {
+            trackQueue.clear();
+            for (int row = 0; row < ui->tracksTableWidget->rowCount(); row++)
+                trackQueue.push_back(row);
+            if (ui->shuffleBtn->isChecked())
+                std::shuffle(trackQueue.begin(), trackQueue.end(), *QRandomGenerator::global());
+            nextTrackIdx = 0;
+        }
+        else {
+            ui->mediaPlayerUI->hide();
+            ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+            return;
+        }
     }
 
-    auto [filePath, trackIdx] = trackQueue.pop();
+    Q_ASSERT(nextTrackIdx >= 0 && nextTrackIdx < trackQueue.size());
+
+    int row = trackQueue[nextTrackIdx];
+    QString filePath = ui->tracksTableWidget->item(row, 0)->data(Qt::UserRole).toString();
 
     if (filePath.isEmpty())
         return;
@@ -100,17 +122,17 @@ void EditorMain::playNext()
     QPixmap pixmap(coverArtPath);
     if (!pixmap.isNull())
         ui->songImg->setPixmap(pixmap.scaled(ui->songImg->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->songTitle->setText(ui->tracksTableWidget->item(trackIdx, 0)->text());
-    ui->songArtistName->setText(ui->tracksTableWidget->item(trackIdx, 1)->text());
+    ui->songTitle->setText(ui->tracksTableWidget->item(row, 0)->text());
+    ui->songArtistName->setText(ui->tracksTableWidget->item(row, 1)->text());
 
-    currTrackIdx = trackIdx;
+    nextTrackIdx++;
 }
 
 void EditorMain::on_playAlbumBtn_clicked()
 {
     switch (player->playbackState()) {
     case QMediaPlayer::StoppedState:
-        playTrack(0);
+        playTrack(0, false);
         break;
     case QMediaPlayer::PlayingState:
         player->pause();
@@ -232,12 +254,14 @@ void EditorMain::trackStateChanged(QMediaPlayer::PlaybackState newState)
 {
     switch (newState) {
     case QMediaPlayer::StoppedState:
-        playNext(); // current track has finished playing, play the next one in the queue
+        if (!inTransition)
+            playNext(); // current track has finished playing, play the next one in the queue
         break;
     case QMediaPlayer::PlayingState:
         ui->mediaPlayerUI->show();
         ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
         ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
+        inTransition = false;
         break;
     case QMediaPlayer::PausedState:
         ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
@@ -259,10 +283,33 @@ void EditorMain::trackProgressBarMouseDragged(int)
 
 void EditorMain::on_TracksReordered()
 {
-    unshuffledTrackQueue.clear();
-    for (int row = 0; row < ui->tracksTableWidget->rowCount(); row++) {
-        const QString& path = ui->tracksTableWidget->item(row, 0)->data(Qt::UserRole).toString();
-        unshuffledTrackQueue.emplaceFront(path, row);
-    }
-    trackQueue = unshuffledTrackQueue;
 }
+
+void EditorMain::on_skipBackwardBtn_clicked()
+{
+    if (nextTrackIdx > 1 && player->position() < 3000) {
+        inTransition = true;
+        nextTrackIdx -= 2;
+        playNext();
+    }
+    else
+        player->setPosition(0);
+}
+
+void EditorMain::on_skipForwardBtn_clicked()
+{
+    player->setPosition(player->duration());
+}
+
+
+void EditorMain::on_shuffleBtn_clicked(bool checked)
+{
+    ui->shuffleBtn_Player->setChecked(checked);
+}
+
+
+void EditorMain::on_shuffleBtn_Player_clicked(bool checked)
+{
+    ui->shuffleBtn->setChecked(checked);
+}
+
