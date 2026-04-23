@@ -57,7 +57,7 @@ private:
     QMediaPlayer* player;
     QAudioOutput* audioOutput;
 
-    int nextTrackIdx;
+    int nextTrackIdx = 0;
     int currTime = 0;
 
     QVector<int> trackQueue;

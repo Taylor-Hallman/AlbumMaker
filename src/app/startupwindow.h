@@ -21,6 +21,8 @@ private slots:
     void on_actionNew_Project_triggered();
     void on_createdProject(QString, QString, QString, QString, QVector<QString>);
 
+    void on_actionExample_Project_triggered();
+
 private:
     Ui::StartupWindow *ui;
 };
