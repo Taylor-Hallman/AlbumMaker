@@ -254,14 +254,12 @@ void EditorMain::trackStateChanged(QMediaPlayer::PlaybackState newState)
 {
     switch (newState) {
     case QMediaPlayer::StoppedState:
-        if (!inTransition)
-            playNext(); // current track has finished playing, play the next one in the queue
+        playNext(); // current track has finished playing, play the next one in the queue
         break;
     case QMediaPlayer::PlayingState:
         ui->mediaPlayerUI->show();
         ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
         ui->playAlbumBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause));
-        inTransition = false;
         break;
     case QMediaPlayer::PausedState:
         ui->playSongBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
@@ -288,9 +286,8 @@ void EditorMain::on_TracksReordered()
 void EditorMain::on_skipBackwardBtn_clicked()
 {
     if (nextTrackIdx > 1 && player->position() < 3000) {
-        inTransition = true;
         nextTrackIdx -= 2;
-        playNext();
+        player->stop();
     }
     else
         player->setPosition(0);
@@ -298,18 +295,20 @@ void EditorMain::on_skipBackwardBtn_clicked()
 
 void EditorMain::on_skipForwardBtn_clicked()
 {
-    player->setPosition(player->duration());
+    player->stop();
 }
 
 
 void EditorMain::on_shuffleBtn_clicked(bool checked)
 {
     ui->shuffleBtn_Player->setChecked(checked);
+    std::shuffle(trackQueue.begin() + nextTrackIdx, trackQueue.end(), *QRandomGenerator::global());
 }
 
 
 void EditorMain::on_shuffleBtn_Player_clicked(bool checked)
 {
     ui->shuffleBtn->setChecked(checked);
+    std::shuffle(trackQueue.begin() + nextTrackIdx, trackQueue.end(), *QRandomGenerator::global());
 }
 

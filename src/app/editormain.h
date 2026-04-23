@@ -57,7 +57,6 @@ private:
     QMediaPlayer* player;
     QAudioOutput* audioOutput;
 
-    bool inTransition = false;
     int nextTrackIdx;
     int currTime = 0;
 
