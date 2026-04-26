@@ -50,6 +50,7 @@ private:
     void trackProgressBarMouseDragged(int);
     void on_TracksReordered();
     void toggleShuffle(bool shuffle);
+    void serializeToJson();
 
     QString coverArtPath;
 
