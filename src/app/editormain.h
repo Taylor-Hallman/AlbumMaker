@@ -49,6 +49,7 @@ private:
     void trackProgressBarValueEdited(int val);
     void trackProgressBarMouseDragged(int);
     void on_TracksReordered();
+    void toggleShuffle(bool shuffle);
 
     QString coverArtPath;
 

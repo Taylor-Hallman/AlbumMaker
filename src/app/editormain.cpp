@@ -283,6 +283,22 @@ void EditorMain::on_TracksReordered()
 {
 }
 
+void EditorMain::toggleShuffle(bool shuffle)
+{
+    if (shuffle)
+        std::shuffle(trackQueue.begin() + nextTrackIdx, trackQueue.end(), *QRandomGenerator::global());
+    else {
+        trackQueue.clear();
+        for (int row = 0; row < ui->tracksTableWidget->rowCount(); row++)
+            trackQueue.push_back(row);
+    }
+}
+
+void EditorMain::serializeToJson()
+{
+
+}
+
 void EditorMain::on_skipBackwardBtn_clicked()
 {
     if (nextTrackIdx > 1 && player->position() < 3000) {
@@ -298,12 +314,11 @@ void EditorMain::on_skipForwardBtn_clicked()
     player->stop();
 }
 
-
 void EditorMain::on_shuffleBtn_clicked(bool checked)
 {
     ui->shuffleBtn_Player->setChecked(checked);
     if (!trackQueue.isEmpty())
-        std::shuffle(trackQueue.begin() + nextTrackIdx, trackQueue.end(), *QRandomGenerator::global());
+        toggleShuffle(checked);
 }
 
 
@@ -311,6 +326,6 @@ void EditorMain::on_shuffleBtn_Player_clicked(bool checked)
 {
     ui->shuffleBtn->setChecked(checked);
     if (!trackQueue.isEmpty())
-        std::shuffle(trackQueue.begin() + nextTrackIdx, trackQueue.end(), *QRandomGenerator::global());
+        toggleShuffle(checked);
 }
 
