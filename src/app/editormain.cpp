@@ -1,13 +1,17 @@
 #include "editormain.h"
 #include "ui_editormain.h"
-#include "savedialog.h"
 #include "../serialization/track.h"
+#include "../serialization/project.h"
+#include "../serialization/projectio.h"
+
+#include <iostream>
 
 #include <QIcon>
 #include <QMediaMetaData>
 #include <QFileDialog>
 #include <QTimer>
 #include <QRandomGenerator>
+#include <QStandardPaths>
 
 EditorMain::EditorMain(QWidget *parent)
     : QMainWindow(parent)
@@ -335,7 +339,7 @@ void EditorMain::on_shuffleBtn_Player_clicked(bool checked)
 
 void EditorMain::on_actionSave_triggered()
 {
-    if (projectPath.isEmpty()) {
+    /*if (projectPath.isEmpty()) {
         SaveDialog* dialog = new SaveDialog(this);
         connect(this, &EditorMain::sendProjectData, dialog, &SaveDialog::on_ProjectDataReceived);
         QVector<Track> tracks;
@@ -350,6 +354,24 @@ void EditorMain::on_actionSave_triggered()
         emit sendProjectData(p, projectPath);
 
         dialog->open();
-    }
-}
+    }*/
 
+    QString dir = projectPath.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) : projectPath;
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        "Save Project",
+        dir + "/Untitled.alb",
+        "AlbumMaker Project (*.alb)"
+    );
+    QVector<Track> tracks;
+    for (int i = 0; i < ui->tracksTableWidget->rowCount(); i++) {
+        tracks.emplaceBack(
+            ui->tracksTableWidget->item(i, 0)->data(Qt::UserRole).toString(),
+            ui->tracksTableWidget->item(i, 0)->text(),
+            ui->tracksTableWidget->item(i, 1)->text()
+        );
+    }
+    Project p{ ui->albumName->text(), ui->artistName->text(), tracks };
+    if (!ProjectIO::saveToFile(p, fileName))
+        std::cerr << "Failed to save file\n";
+}

@@ -46,3 +46,9 @@ void StartupWindow::on_actionExample_Project_triggered()
     this->close();
 }
 
+
+void StartupWindow::on_actionOpen_Recent_triggered()
+{
+
+}
+

@@ -9,7 +9,6 @@ APP_DIR = $$SRC_DIR/app
 SOURCES += \
     src/app/createprojectdialog.cpp \
     src/app/editormain.cpp \
-    src/app/savedialog.cpp \
     src/main.cpp \
     src/app/startupwindow.cpp \
     src/serialization/project.cpp \
@@ -23,7 +22,6 @@ SOURCES += \
 HEADERS += \
     src/app/createprojectdialog.h \
     src/app/editormain.h \
-    src/app/savedialog.h \
     src/app/startupwindow.h \
     src/serialization/project.h \
     src/serialization/projectio.h \
@@ -36,7 +34,6 @@ HEADERS += \
 FORMS += \
     src/app/createprojectdialog.ui \
     src/app/editormain.ui \
-    src/app/savedialog.ui \
     src/app/startupwindow.ui
 
 # Default rules for deployment.
