@@ -8,7 +8,6 @@
 
 struct Project
 {
-    QString projectName;
     QString albumName;
     QString artist;
     QVector<Track> tracks;

@@ -8,6 +8,8 @@
 #include <QPoint>
 #include <QStack>
 
+#include "../serialization/project.h"
+
 namespace Ui {
 class EditorMain;
 }
@@ -38,6 +40,8 @@ private slots:
     void on_shuffleBtn_Player_clicked(bool checked);
 
 
+    void on_actionSave_triggered();
+
 private:
     void playTrack(int trackIdx, bool keepFirst);
     void playNext();
@@ -63,6 +67,11 @@ private:
     int currTime = 0;
 
     QVector<int> trackQueue;
+
+    QString projectPath = "";
+
+signals:
+    void sendProjectData(Project& p, QString path);
 };
 
 #endif // EDITORMAIN_H

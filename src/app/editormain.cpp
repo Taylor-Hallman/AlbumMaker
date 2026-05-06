@@ -1,5 +1,8 @@
 #include "editormain.h"
 #include "ui_editormain.h"
+#include "savedialog.h"
+#include "../serialization/track.h"
+
 #include <QIcon>
 #include <QMediaMetaData>
 #include <QFileDialog>
@@ -327,5 +330,26 @@ void EditorMain::on_shuffleBtn_Player_clicked(bool checked)
     ui->shuffleBtn->setChecked(checked);
     if (!trackQueue.isEmpty())
         toggleShuffle(checked);
+}
+
+
+void EditorMain::on_actionSave_triggered()
+{
+    if (projectPath.isEmpty()) {
+        SaveDialog* dialog = new SaveDialog(this);
+        connect(this, &EditorMain::sendProjectData, dialog, &SaveDialog::on_ProjectDataReceived);
+        QVector<Track> tracks;
+        for (int i = 0; i < ui->tracksTableWidget->rowCount(); i++) {
+            tracks.emplaceBack(
+                ui->tracksTableWidget->item(i, 0)->data(Qt::UserRole).toString(),
+                ui->tracksTableWidget->item(i, 0)->text(),
+                ui->tracksTableWidget->item(i, 1)->text()
+            );
+        }
+        Project p{ ui->albumName->text(), ui->artistName->text(), tracks };
+        emit sendProjectData(p, projectPath);
+
+        dialog->open();
+    }
 }
 

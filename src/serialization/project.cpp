@@ -1,6 +1,7 @@
 #include "project.h"
 
 #include <QJsonArray>
+#include <QFile>
 #include <stdexcept>
 
 QJsonObject Project::toJson() const
@@ -9,7 +10,6 @@ QJsonObject Project::toJson() const
     for (const auto& track : tracks)
         trackArr.append(track.toJson());
     return {
-        {"projectName", projectName},
         {"albumName", albumName},
         {"artist", artist},
         {"tracks", trackArr}
@@ -22,7 +22,6 @@ Project Project::fromJson(const QJsonObject obj)
         throw std::runtime_error("Invalid Project JSON");
 
     Project project;
-    project.projectName = obj["projectName"].toString();
     project.albumName = obj["albumName"].toString();
     project.artist = obj["artist"].toString();
 
